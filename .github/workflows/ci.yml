@@ -23,3 +23,11 @@ jobs:
         run: |
           echo "CI Pipeline completed successfully"
           echo "Build timestamp: $(date)"
+
+      - name: Send Slack Success Notification
+        if: success()
+        run: |
+          curl -X POST \
+            -H "Content-type: application/json" \
+            --data '{"text":"VLE-3 CI/CD pipeline succeeded"}' \
+            "${{ secrets.SLACK_WEBHOOK_URL }}"
