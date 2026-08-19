@@ -1,0 +1,25 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Validate HTML application
+        run: |
+          echo "Validating HTML application..."
+          test -f index.html
+          echo "HTML validation successful"
+
+      - name: Generate workflow output
+        run: |
+          echo "CI Pipeline completed successfully"
+          echo "Build timestamp: $(date)"
