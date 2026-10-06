@@ -1,7 +1,10 @@
-name: CI Pipeline
+name: CampusOps CI
 
 on:
   push:
+    branches:
+      - main
+  pull_request:
     branches:
       - main
 
@@ -10,24 +13,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout source code
         uses: actions/checkout@v4
 
-      - name: Validate HTML application
-        run: |
-          echo "Validating HTML application..."
-          test -f index.html
-          echo "HTML validation successful"
+      - name: Build Docker image
+        run: docker build -t devops-webapp .
 
-      - name: Generate workflow output
-        run: |
-          echo "CI Pipeline completed successfully"
-          echo "Build timestamp: $(date)"
-
-      - name: Send Slack Success Notification
-        if: success()
-        run: |
-          curl -X POST \
-            -H "Content-type: application/json" \
-            --data '{"text":"VLE-3 CI/CD pipeline succeeded"}' \
-            "${{ secrets.SLACK_WEBHOOK_URL }}"
+      - name: Test Docker image
+        run: docker images devops-webapp
